@@ -1,5 +1,7 @@
 import * as React from "react";
 import ThemeRegistry from "@/components/theme-registry/theme.registry";
+import AppBarHeader from "@/components/header/app.header";
+import AppFooter from "@/components/footer/app.footer";
 
 export default function RootLayout({
     children,
@@ -9,7 +11,11 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body>
-                <ThemeRegistry>{children}</ThemeRegistry>
+                <ThemeRegistry>
+                    <AppBarHeader></AppBarHeader>
+                    {children}
+                    <AppFooter></AppFooter>
+                </ThemeRegistry>
             </body>
         </html>
     );
