@@ -19,6 +19,7 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 import { Avatar, Container } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 const Search = styled("div")(({ theme }) => ({
     position: "relative",
@@ -61,6 +62,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function AppBarHeader() {
+    const { data: session } = useSession();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
         React.useState<null | HTMLElement>(null);
@@ -163,18 +165,31 @@ export default function AppBarHeader() {
                             />
                         </Search>
                         <Box sx={{ flexGrow: 1 }} />
-                        <Box
-                            sx={{
-                                display: { xs: "none", md: "flex" },
-                                alignItems: "center",
-                                gap: "20px",
-                                cursor: "pointer",
-                            }}>
-                            <Link href={"/playlist"}>Playlist</Link>
-                            <Link href={"/likes"}>Likes</Link>
-                            <Link href={"/upload"}>Upload</Link>
-                            <Avatar onClick={handleProfileMenuOpen}>TT</Avatar>
-                        </Box>
+                        {session ? (
+                            <Box
+                                sx={{
+                                    display: { xs: "none", md: "flex" },
+                                    alignItems: "center",
+                                    gap: "20px",
+                                    cursor: "pointer",
+                                }}>
+                                <Link href={"/playlist"}>Playlist</Link>
+                                <Link href={"/likes"}>Likes</Link>
+                                <Link href={"/upload"}>Upload</Link>
+                                <Avatar onClick={handleProfileMenuOpen}>
+                                    TT
+                                </Avatar>
+                            </Box>
+                        ) : (
+                            <a
+                                href="/api/auth/signin"
+                                style={{
+                                    cursor: "pointer",
+                                    textDecoration: "unset",
+                                }}>
+                                Login
+                            </a>
+                        )}
                         <Box sx={{ display: { xs: "flex", md: "none" } }}>
                             <IconButton
                                 size="large"
