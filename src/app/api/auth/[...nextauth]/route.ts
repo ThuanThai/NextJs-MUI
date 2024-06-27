@@ -1,46 +1,43 @@
-import NextAuth from "next-auth";
-import GithubProvider from "next-auth/providers/github";
-import CredentialsProvider from "next-auth/providers/credentials";
-import { AuthOptions } from "next-auth";
-import { sendRequest } from "@/utils/api";
-import { JWT } from "next-auth/jwt";
+import NextAuth from 'next-auth';
+import GithubProvider from 'next-auth/providers/github';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import { AuthOptions } from 'next-auth';
+import { sendRequest } from '@/utils/api';
+import { JWT } from 'next-auth/jwt';
 
 export const authOptions: AuthOptions = {
     // Configure one or more authentication providers
     secret: process.env.NO_SECRET,
     providers: [
-        GithubProvider({
-            clientId: process.env.GITHUB_ID!,
-            clientSecret: process.env.GITHUB_SECRET!,
-        }),
-        // ...add more providers here
-
         CredentialsProvider({
             // The name to display on the sign in form (e.g. "Sign in with...")
-            name: "Credentials",
+            name: 'Credentials',
             // `credentials` is used to generate a form on the sign in page.
             // You can specify which fields should be submitted, by adding keys to the `credentials` object.
             // e.g. domain, username, password, 2FA token, etc.
             // You can pass any HTML attribute to the <input> tag through the object.
             credentials: {
                 username: {
-                    label: "Username",
-                    type: "text",
-                    placeholder: "jsmith",
+                    label: 'Username',
+                    type: 'text',
+                    placeholder: 'jsmith',
                 },
-                password: { label: "Password", type: "password" },
+                password: { label: 'Password', type: 'password' },
             },
             async authorize(credentials, req) {
                 // Add logic here to look up the user from the credentials supplied
-                const user = {
-                    id: "1",
-                    name: "J Smith",
-                    email: "jsmith@example.com",
-                };
+                const res = await sendRequest<IBackendRes<JWT>>({
+                    url: 'http://localhost:8000/api/v1/auth/login',
+                    method: 'POST',
+                    body: {
+                        username: credentials?.username,
+                        password: credentials?.password,
+                    },
+                });
 
-                if (user) {
+                if (res && res.data) {
                     // Any object returned will be saved in `user` property of the JWT
-                    return user;
+                    return res.data as any;
                 } else {
                     // If you return null then an error will be displayed advising the user to check their details.
                     return null;
@@ -49,16 +46,21 @@ export const authOptions: AuthOptions = {
                 }
             },
         }),
+        GithubProvider({
+            clientId: process.env.GITHUB_ID!,
+            clientSecret: process.env.GITHUB_SECRET!,
+        }),
+        // ...add more providers here
     ],
     callbacks: {
         async jwt({ token, user, account, profile, trigger }) {
             // Persist the OAuth access_token to the token right after signin
-            if (trigger === "signIn") {
+            if (trigger === 'signIn' && account?.provider !== 'credentials') {
                 const res = await sendRequest<IBackendRes<JWT>>({
-                    url: "http://localhost:8000/api/v1/auth/social-media",
-                    method: "POST",
+                    url: 'http://localhost:8000/api/v1/auth/social-media',
+                    method: 'POST',
                     body: {
-                        type: "GITHUB",
+                        type: account?.provider.toUpperCase(),
                         username: user.email,
                     },
                 });
@@ -66,6 +68,14 @@ export const authOptions: AuthOptions = {
                     token = res.data;
                     return token;
                 }
+            }
+            if (trigger === 'signIn' && account?.provider === 'credentials') {
+                //@ts-ignore
+                token.access_token = user.accessToken;
+                //@ts-ignore
+                token.refresh_token = user.refresh_token;
+                //@ts-ignore
+                token.user = user.user;
             }
             return token;
         },

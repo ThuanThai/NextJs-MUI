@@ -1,67 +1,67 @@
-import { useWaveSurfer } from "@/utils/customHook";
-import { Container, Tooltip } from "@mui/material";
-import { useSearchParams } from "next/navigation";
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { WaveSurferOptions } from "wavesurfer.js";
-import "./style.scss";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import PauseIcon from "@mui/icons-material/Pause";
+import { useWaveSurfer } from '@/utils/customHook';
+import { Container, Tooltip } from '@mui/material';
+import { useSearchParams } from 'next/navigation';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { WaveSurferOptions } from 'wavesurfer.js';
+import './style.scss';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PauseIcon from '@mui/icons-material/Pause';
 
 const arrComments = [
     {
         id: 1,
-        avatar: "http://localhost:8000/images/chill1.png",
+        avatar: 'http://localhost:8000/images/chill1.png',
         moment: 10,
-        user: "username 1",
-        content: "just a comment1",
+        user: 'username 1',
+        content: 'just a comment1',
     },
     {
         id: 2,
-        avatar: "http://localhost:8000/images/chill1.png",
+        avatar: 'http://localhost:8000/images/chill1.png',
         moment: 30,
-        user: "username 2",
-        content: "just a comment3",
+        user: 'username 2',
+        content: 'just a comment3',
     },
     {
         id: 3,
-        avatar: "http://localhost:8000/images/chill1.png",
+        avatar: 'http://localhost:8000/images/chill1.png',
         moment: 50,
-        user: "username 3",
-        content: "just a comment3",
+        user: 'username 3',
+        content: 'just a comment3',
     },
 ];
 
 const WaveTrack = () => {
     const containerRef = useRef<HTMLDivElement>(null);
     const searchParams = useSearchParams();
-    const fileName = searchParams.get("audio");
+    const fileName = searchParams.get('audio');
     const [isPlaying, setIsPlaying] = useState(false);
 
-    const waveOptions = useMemo((): Omit<WaveSurferOptions, "container"> => {
+    const waveOptions = useMemo((): Omit<WaveSurferOptions, 'container'> => {
         let gradient, progressGradient;
-        if (typeof window !== "undefined") {
-            const canvas = document.createElement("canvas");
-            const ctx = canvas.getContext("2d")!;
+        if (typeof window !== 'undefined') {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d')!;
             // Define the waveform gradient
             gradient = ctx.createLinearGradient(0, 0, 0, canvas.height * 1.35);
-            gradient.addColorStop(0, "#656666"); // Top color
+            gradient.addColorStop(0, '#656666'); // Top color
             gradient.addColorStop(
                 (canvas.height * 0.7) / canvas.height,
-                "#656666"
+                '#656666'
             ); // Top color
             gradient.addColorStop(
                 (canvas.height * 0.7 + 1) / canvas.height,
-                "#ffffff"
+                '#ffffff'
             ); // White line
             gradient.addColorStop(
                 (canvas.height * 0.7 + 2) / canvas.height,
-                "#ffffff"
+                '#ffffff'
             ); // White line
             gradient.addColorStop(
                 (canvas.height * 0.7 + 3) / canvas.height,
-                "#B1B1B1"
+                '#B1B1B1'
             ); // Bottom color
-            gradient.addColorStop(1, "#B1B1B1"); // Bottom color
+            gradient.addColorStop(1, '#B1B1B1'); // Bottom color
 
             // Define the progress gradient
             progressGradient = ctx.createLinearGradient(
@@ -70,24 +70,24 @@ const WaveTrack = () => {
                 0,
                 canvas.height * 1.35
             );
-            progressGradient.addColorStop(0, "#EE772F"); // Top color
+            progressGradient.addColorStop(0, '#EE772F'); // Top color
             progressGradient.addColorStop(
                 (canvas.height * 0.7) / canvas.height,
-                "#EB4926"
+                '#EB4926'
             ); // Top color
             progressGradient.addColorStop(
                 (canvas.height * 0.7 + 1) / canvas.height,
-                "#ffffff"
+                '#ffffff'
             ); // White line
             progressGradient.addColorStop(
                 (canvas.height * 0.7 + 2) / canvas.height,
-                "#ffffff"
+                '#ffffff'
             ); // White line
             progressGradient.addColorStop(
                 (canvas.height * 0.7 + 3) / canvas.height,
-                "#F6B094"
+                '#F6B094'
             ); // Bottom color
-            progressGradient.addColorStop(1, "#F6B094"); // Bottom color
+            progressGradient.addColorStop(1, '#F6B094'); // Bottom color
         }
 
         return {
@@ -100,7 +100,7 @@ const WaveTrack = () => {
     }, []);
 
     const ws = useWaveSurfer(containerRef, waveOptions);
-    const onClick = () => {
+    const onPlayClick = () => {
         if (ws) {
             ws.playPause();
         }
@@ -113,8 +113,8 @@ const WaveTrack = () => {
         return `${minutes}:${paddedSeconds}`;
     };
     const hoverRef = useRef<HTMLDivElement | null>(null);
-    const [time, setTime] = useState<string>("00:00");
-    const [duration, setDuration] = useState<string>("00:00");
+    const [time, setTime] = useState<string>('00:00');
+    const [duration, setDuration] = useState<string>('00:00');
 
     const calcLeft = (moment: number) => {
         const d = 199;
@@ -128,19 +128,19 @@ const WaveTrack = () => {
         const waveform = containerRef.current!;
         const hover = hoverRef.current!;
         waveform.addEventListener(
-            "pointermove",
+            'pointermove',
             //@ts-ignore
             (e) => (hover.style.width = `${e.offsetX}px`)
         );
 
         const subcriptions = [
-            ws.on("play", () => setIsPlaying(true)),
-            ws.on("pause", () => setIsPlaying(false)),
-            ws.on("decode", (duration) => setDuration(formatTime(duration))),
-            ws.on("timeupdate", (currentTime) =>
+            ws.on('play', () => setIsPlaying(true)),
+            ws.on('pause', () => setIsPlaying(false)),
+            ws.on('decode', (duration) => setDuration(formatTime(duration))),
+            ws.on('timeupdate', (currentTime) =>
                 setTime(formatTime(currentTime))
             ),
-            ws.once("interaction", () => {
+            ws.once('interaction', () => {
                 ws.play();
             }),
         ];
@@ -151,125 +151,139 @@ const WaveTrack = () => {
 
     return (
         <Container>
-            <div className="background-gradient">
-                <div className="title">
-                    <button
-                        style={{
-                            width: 60,
-                            height: 60,
-                            backgroundColor: "#f50",
-                            borderRadius: "100%",
-                            border: "#f50",
-                        }}
-                        onClick={onClick}>
-                        {isPlaying ? (
-                            <PauseIcon
-                                sx={{
-                                    width: 40,
-                                    height: 40,
-                                    color: "white",
-                                    textAlign: "center",
-                                }}
-                            />
-                        ) : (
-                            <PlayArrowIcon
-                                sx={{
-                                    width: 40,
-                                    height: 40,
-                                    color: "white",
-                                    textAlign: "center",
-                                }}
-                            />
-                        )}
-                    </button>
+            <div style={{ marginTop: 20 }}>
+                <div
+                    style={{
+                        display: 'flex',
+                        gap: 15,
+                        padding: 20,
+                        height: 400,
+                        background:
+                            'linear-gradient(135deg, rgb(106, 112, 67) 0%, rgb(11, 15, 20) 100%)',
+                    }}>
                     <div
+                        className="left"
                         style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            rowGap: "4px",
-                            justifyItems: "flex-start",
+                            width: '75%',
+                            height: 'calc(100% - 10px)',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'space-between',
+                        }}>
+                        <div className="info" style={{ display: 'flex' }}>
+                            <div>
+                                <div
+                                    onClick={() => onPlayClick()}
+                                    style={{
+                                        borderRadius: '50%',
+                                        background: '#f50',
+                                        height: '50px',
+                                        width: '50px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        cursor: 'pointer',
+                                    }}>
+                                    {isPlaying === true ? (
+                                        <PauseIcon
+                                            sx={{
+                                                fontSize: 30,
+                                                color: 'white',
+                                            }}
+                                        />
+                                    ) : (
+                                        <PlayArrowIcon
+                                            sx={{
+                                                fontSize: 30,
+                                                color: 'white',
+                                            }}
+                                        />
+                                    )}
+                                </div>
+                            </div>
+                            <div style={{ marginLeft: 20 }}>
+                                <div
+                                    style={{
+                                        padding: '0 5px',
+                                        background: '#333',
+                                        fontSize: 30,
+                                        width: 'fit-content',
+                                        color: 'white',
+                                    }}>
+                                    Danh Doi
+                                </div>
+                                <div
+                                    style={{
+                                        padding: '0 5px',
+                                        marginTop: 10,
+                                        background: '#333',
+                                        fontSize: 20,
+                                        width: 'fit-content',
+                                        color: 'white',
+                                    }}>
+                                    Obito
+                                </div>
+                            </div>
+                        </div>
+                        <div ref={containerRef} className="wave-form-container">
+                            <div id="time">{time}</div>
+                            <div id="duration">{duration}</div>
+                            <div ref={hoverRef} id="hover"></div>
+                            <div
+                                className="overlay"
+                                style={{
+                                    position: 'absolute',
+                                    height: '30px',
+                                    width: '100%',
+                                    bottom: '0',
+                                    backdropFilter: 'brightness(0.5)',
+                                }}></div>
+                            <div
+                                style={{
+                                    position: 'relative',
+                                    zIndex: 20,
+                                }}
+                                className="comment">
+                                {arrComments &&
+                                    arrComments.map((item) => (
+                                        <Tooltip title="Delete">
+                                            <img
+                                                onPointerMove={(e) => {
+                                                    hoverRef.current!.style.width =
+                                                        calcLeft(
+                                                            item.moment + 3
+                                                        );
+                                                }}
+                                                style={{
+                                                    position: 'absolute',
+                                                    top: 71,
+                                                    width: 20,
+                                                    height: 20,
+                                                    objectFit: 'cover',
+                                                    left: calcLeft(item.moment),
+                                                }}
+                                                src={`${item.avatar}`}
+                                                alt=""
+                                            />
+                                        </Tooltip>
+                                    ))}
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        className="right"
+                        style={{
+                            width: '25%',
+                            padding: 15,
+                            display: 'flex',
+                            alignItems: 'center',
                         }}>
                         <div
                             style={{
-                                display: "inline-block",
-                                padding: 4,
-                                background: "black",
-                                fontSize: 20,
-                            }}>
-                            Obito-'Danh Doi' Album
-                        </div>
-                        <span
-                            style={{
-                                padding: 4,
-                                background: "black",
-                                width: "fit-content",
-                            }}>
-                            Trending Music
-                        </span>
-                    </div>
-                </div>
-                <div className="release-time">8 months ago</div>
-                <div className="artwork">
-                    <img
-                        style={{
-                            width: "100%",
-                            height: "100%",
-                            objectFit: "cover",
-                        }}
-                        src="https://i1.sndcdn.com/artworks-TF5pH5awcmhGswqo-CyNskg-t500x500.jpg"
-                        alt=""
-                    />
-                </div>
-                <div
-                    style={{
-                        position: "absolute",
-                        bottom: 20,
-                        maxWidth: "calc(100% - 340px)",
-                        right: 0,
-                        left: 0,
-                        padding: "0 30px",
-                    }}>
-                    <div
-                        id="waveform"
-                        style={{
-                            position: "relative",
-                            cursor: "pointer",
-                            zIndex: 1,
-                        }}
-                        ref={containerRef}>
-                        <div id="time">{time}</div>
-                        <div id="duration">{duration}</div>
-                        <div className="hover" ref={hoverRef}></div>
-                        <div
-                            style={{
-                                position: "relative",
-                                zIndex: 20,
-                                top: "70%",
-                                background: "red",
-                            }}
-                            className="comment">
-                            {arrComments &&
-                                arrComments.map((item) => (
-                                    <Tooltip title="Delete">
-                                        <img
-                                            onPointerMove={(e) => {
-                                                hoverRef.current!.style.width =
-                                                    calcLeft(item.moment + 3);
-                                            }}
-                                            style={{
-                                                position: "absolute",
-                                                top: 71,
-                                                width: 20,
-                                                height: 20,
-                                                objectFit: "cover",
-                                                left: calcLeft(item.moment),
-                                            }}
-                                            src={`${item.avatar}`}
-                                            alt=""
-                                        />
-                                    </Tooltip>
-                                ))}
-                        </div>
+                                background: '#ccc',
+                                width: 250,
+                                height: 250,
+                            }}></div>
                     </div>
                 </div>
             </div>
