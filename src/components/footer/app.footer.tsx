@@ -19,7 +19,7 @@ const AppFooter = () => {
                 sx={{ display: "flex", alignItems: "center", columnGap: 15 }}>
                 <AudioPlayer
                     style={{ backgroundColor: "#f5f5f5", boxShadow: "none" }}
-                    autoPlay
+                    autoPlay={false}
                     volume={0.5}
                     src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/tracks/hoidanit.mp3`}
                     onPlay={(e) => console.log("onPlay")}
