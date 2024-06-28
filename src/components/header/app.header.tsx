@@ -193,7 +193,7 @@ export default function AppHeader() {
                             </Box>
                         ) : (
                             <a
-                                onClick={() => signIn()}
+                                onClick={() => router.push("auth/signin")}
                                 style={{
                                     cursor: "pointer",
                                     textDecoration: "unset",

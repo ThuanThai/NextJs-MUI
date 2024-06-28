@@ -4,7 +4,7 @@ import AppBarHeader from "@/components/header/app.header";
 import AppFooter from "@/components/footer/app.footer";
 import NextAuthWrapper from "@/lib/next.auth.wrapper";
 import { Poppins } from "next/font/google";
-import "./style.scss";
+import "@/styles/style.scss";
 
 const poppins = Poppins({
     subsets: ["latin"],
