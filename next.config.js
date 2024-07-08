@@ -16,7 +16,7 @@ const nextConfig = {
         pathname: '/random',
       },
     ],
-  },
+  }
 };
 
 module.exports = nextConfig;
