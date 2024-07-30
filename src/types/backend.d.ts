@@ -19,7 +19,6 @@ declare global {
             type: string;
         };
         isDeleted: boolean;
-        __v: 0;
         createdAt: string;
         updatedAt: string;
     }
@@ -49,5 +48,14 @@ declare global {
             total: number;
         };
         result: T[];
+    }
+
+    interface IShareTrack extends ITrackTop {
+        isPlaying: boolean;
+    }
+
+    interface ITrackContext {
+        currentTrack: IShareTrack | undefined;
+        setCurrentTrack: Dispatch<SetStateAction<ITrackContext | undefined>>;
     }
 }

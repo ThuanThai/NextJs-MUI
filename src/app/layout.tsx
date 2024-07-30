@@ -3,6 +3,8 @@ import ThemeRegistry from '@/components/theme-registry/theme.registry';
 import NextAuthWrapper from '@/lib/next.auth.wrapper';
 import { Poppins } from 'next/font/google';
 import '@/styles/style.scss';
+import { ToastProvider } from '@/utils/toast';
+import { TrackContextProvider } from '@/lib/track.wrapper';
 
 const poppins = Poppins({
     subsets: ['latin'],
@@ -20,7 +22,11 @@ export default function RootLayout({
         <html lang="en" className={poppins.variable}>
             <body>
                 <ThemeRegistry>
-                    <NextAuthWrapper>{children}</NextAuthWrapper>
+                    <NextAuthWrapper>
+                        <TrackContextProvider>
+                            <ToastProvider>{children}</ToastProvider>
+                        </TrackContextProvider>
+                    </NextAuthWrapper>
                 </ThemeRegistry>
             </body>
         </html>

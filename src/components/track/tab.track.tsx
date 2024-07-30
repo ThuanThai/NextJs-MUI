@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { Box, Tab, Tabs } from '@mui/material';
 import React from 'react';
 import StepOne from './steps/step.one';
@@ -25,8 +25,7 @@ function CustomTabPanel(props: TabPanelProps) {
             hidden={value !== index}
             id={`simple-tabpanel-${index}`}
             aria-labelledby={`simple-tab-${index}`}
-            {...other}
-        >
+            {...other}>
             {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
         </div>
     );
@@ -42,10 +41,10 @@ function a11yProps(index: number) {
 function UploadTrack() {
     const [value, setValue] = React.useState(0);
     const [trackUpload, setTrackUpload] = React.useState<TrackUpload>({
-        fileName: "",
-        uploadTrackName: "",
-        percent: 0
-    })
+        fileName: '',
+        uploadTrackName: '',
+        percent: 0,
+    });
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
     };
@@ -53,20 +52,35 @@ function UploadTrack() {
     return (
         <Box sx={{ width: '100%' }}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                    <Tab label="Tracks" {...a11yProps(0)} />
-                    <Tab label="Basic Information" {...a11yProps(1)} />
+                <Tabs
+                    value={value}
+                    onChange={handleChange}
+                    aria-label="basic tabs example">
+                    <Tab
+                        disabled={value !== 0}
+                        label="Tracks"
+                        {...a11yProps(0)}
+                    />
+                    <Tab
+                        disabled={value !== 1}
+                        label="Basic Information"
+                        {...a11yProps(1)}
+                    />
                 </Tabs>
             </Box>
             <CustomTabPanel value={value} index={0}>
-                <StepOne trackUpload={trackUpload} setValue={setValue} setTrackUpload={setTrackUpload}></StepOne>
+                <StepOne
+                    trackUpload={trackUpload}
+                    setValue={setValue}
+                    setTrackUpload={setTrackUpload}></StepOne>
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
-                <StepTwo trackUpload={trackUpload}></StepTwo>
+                <StepTwo
+                    setValue={setValue}
+                    trackUpload={trackUpload}></StepTwo>
             </CustomTabPanel>
         </Box>
     );
 }
-
 
 export default UploadTrack;

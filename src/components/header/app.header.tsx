@@ -63,7 +63,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function AppHeader() {
     const { data: session } = useSession();
-    // console.log(session);
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
         React.useState<null | HTMLElement>(null);
@@ -101,7 +100,7 @@ export default function AppHeader() {
             anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             sx={{ a: { color: 'unset', textDecoration: 'unset' } }}>
             <MenuItem onClick={handleMenuClose}>
-                <Link href={'/profile'}>Profile</Link>
+                <Link href={`/profile/${session?.user._id}`}>Profile</Link>
             </MenuItem>
             <MenuItem onClick={handleMenuClose}>
                 <Link href={'/account'}>My account</Link>
@@ -193,7 +192,7 @@ export default function AppHeader() {
                             </Box>
                         ) : (
                             <a
-                                onClick={() => router.push('auth/signin')}
+                                onClick={() => router.push('/auth/signin')}
                                 style={{
                                     cursor: 'pointer',
                                     textDecoration: 'unset',
