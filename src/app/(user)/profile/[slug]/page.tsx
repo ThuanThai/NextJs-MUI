@@ -10,7 +10,7 @@ const ProfilePage = async ({ params }: { params: { slug: string } }) => {
         method: 'POST',
         body: { id: params.slug },
     });
-    console.log('🚀 ~ ProfilePage ~ tracks:', tracks.data?.result[0]);
+  
     const trackList = tracks.data?.result;
     return (
         <Container>

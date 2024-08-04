@@ -31,7 +31,13 @@ const arrComments = [
     },
 ];
 
-const WaveTrack = () => {
+interface IProps {
+    data: ITrackTop | undefined;
+}
+
+const WaveTrack = (props: IProps) => {
+    const { data } = props;
+    console.log(data);
     const containerRef = useRef<HTMLDivElement>(null);
     const searchParams = useSearchParams();
     const fileName = searchParams.get('audio');
@@ -210,7 +216,7 @@ const WaveTrack = () => {
                                         width: 'fit-content',
                                         color: 'white',
                                     }}>
-                                    Danh Doi
+                                    {data?.title}
                                 </div>
                                 <div
                                     style={{
@@ -221,7 +227,7 @@ const WaveTrack = () => {
                                         width: 'fit-content',
                                         color: 'white',
                                     }}>
-                                    Obito
+                                    {data?.description}
                                 </div>
                             </div>
                         </div>
@@ -246,7 +252,7 @@ const WaveTrack = () => {
                                 className="comment">
                                 {arrComments &&
                                     arrComments.map((item) => (
-                                        <Tooltip title="Delete">
+                                        <Tooltip key={item.id} title="Delete">
                                             <img
                                                 onPointerMove={(e) => {
                                                     hoverRef.current!.style.width =
@@ -273,17 +279,26 @@ const WaveTrack = () => {
                     <div
                         className="right"
                         style={{
-                            width: '25%',
+                            width: '37 %',
                             padding: 15,
                             display: 'flex',
                             alignItems: 'center',
                         }}>
                         <div
                             style={{
-                                background: '#ccc',
-                                width: 250,
-                                height: 250,
-                            }}></div>
+                                width: '100%',
+                                height: '100%',
+                            }}>
+                            <img
+                                style={{
+                                    width: '100%',
+                                    height: '100%',
+                                    objectFit: 'cover',
+                                }}
+                                src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/${data?.imgUrl}`}
+                                alt=""
+                            />
+                        </div>
                     </div>
                 </div>
             </div>

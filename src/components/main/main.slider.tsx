@@ -99,7 +99,7 @@ const MainSlider = (props: IProps) => {
                                     textDecoration: 'unset',
                                     color: 'unset',
                                 }}
-                                href={`track/${item._id}?audio=${item.trackUrl}`}>
+                                href={`/track/${item?._id}?audio=${item?.trackUrl}&id=${item?._id}`}>
                                 <h4 className="track-title">{item.title}</h4>
                             </Link>
                             <h5>{item.description}</h5>

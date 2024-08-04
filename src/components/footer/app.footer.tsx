@@ -2,18 +2,30 @@
 import { useTrackContext } from '@/lib/track.wrapper';
 import { useHasMounted } from '@/utils/customHook';
 import { AppBar, Container } from '@mui/material';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 
 const AppFooter = () => {
-    const wrapper = useTrackContext();
+    const {currentTrack, setCurrentTrack} = useTrackContext();
     const hasMounted = useHasMounted();
+    const audioRef = useRef(null)
     if (!hasMounted) {
         return <></>;
     }
 
-    console.log(wrapper?.currentTrack);
+
+     //@ts-ignore
+    if (audioRef?.current?.audio?.current) {
+        if(currentTrack?.isPlaying) {
+            //@ts-ignore
+            audioRef.current.audio.current.play()
+        } else {
+             //@ts-ignore
+             audioRef.current.audio.current.pause()
+        }
+         
+    }
 
     return (
         <AppBar
@@ -28,13 +40,17 @@ const AppFooter = () => {
                     '.rhap_main': { gap: '30px' },
                 }}>
                 <AudioPlayer
+                    ref={audioRef} 
                     layout="horizontal-reverse"
                     style={{ backgroundColor: '#f5f5f5', boxShadow: 'none' }}
-                    autoPlay={false}
                     volume={0.5}
-                    src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/tracks/hoidanit.mp3`}
-                    onPlay={(e) => console.log('onPlay')}
-                    // other props here
+                    src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/tracks/${currentTrack?.trackUrl}`}
+                    onPlay={() => {setCurrentTrack({...currentTrack, isPlaying: true})
+                    //@ts-ignore
+                    audioRef.current.audio.current.play()}}
+                    onPause={() => {setCurrentTrack({...currentTrack, isPlaying: false})
+                    //@ts-ignore
+                    audioRef.current.audio.current.pause()}}
                 />
                 <div
                     style={{
@@ -42,8 +58,8 @@ const AppFooter = () => {
                         flexDirection: 'column',
                         minWidth: 100,
                     }}>
-                    <div style={{ color: '#ccc' }}>Jasper</div>
-                    <div style={{ color: 'black' }}>Who Am I</div>
+                    <div style={{ color: '#ccc' }}>{currentTrack?.description}</div>
+                    <div style={{ color: 'black' }}>{currentTrack?.title}</div>
                 </div>
             </Container>
         </AppBar>
